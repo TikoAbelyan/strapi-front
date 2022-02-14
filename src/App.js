@@ -1,23 +1,24 @@
-import logo from './logo.svg';
+import {useState, useEffect} from 'react';
 import './App.css';
 
 function App() {
+  const [state, setState] = useState([])
+
+  const fetching = async () => {
+    const res = await fetch(`https://guarded-island-36639.herokuapp.com/api/effects`)
+    const result = await res.json();
+    if(result) {
+      setState(result.data)
+    }
+  }
+  useEffect(()=> {
+    fetching();
+  },[])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {
+        state.map((item, index) => <div key={index}>{item.attributes.num}</div>)
+      }
     </div>
   );
 }
